@@ -1,0 +1,91 @@
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
+# ===============================================
+#          Personal Budget Calculator
+# ===============================================
+
+# Step 1: Get income from the user
+income = int(input("Enter your total monthly income (₱): "))
+
+# Step 2: Get expenses from the user
+rent = int(input("Enter your rent expense (₱): "))
+groceries = int(input("Enter your groceries expense (₱): "))
+transport = int(input("Enter your transport expense (₱): "))
+utilities = int(input("Enter your utilities expense (₱): "))
+other_expenses = int(input("Enter your other expenses (₱): "))
+
+# Step 3 : Calculate total expenses
+total_expenses = rent + groceries + transport + utilities + other_expenses
+
+# Step 4: Calculate remaining budget
+remaining_budget = income - total_expenses
+
+
+# Step 5: Function to calculate percentage
+def percentage(part, whole):
+    return (part / whole * 100) if whole > 0 else 0
+
+
+# Step 6: Display results
+print("\n===============================================")
+print("           📊 Monthly Budget Report")
+print("===============================================")
+print(f"Total Income:        ₱{income:,}")
+print("-----------------------------------------------")
+print("Expenses Breakdown:")
+print(f"  🏠 Rent:           ₱{rent:,}   ({percentage(rent, income):.2f}%)")
+print(f"  🛒 Groceries:      ₱{groceries:,}   ({percentage(groceries, income):.2f}%)")
+print(f"  🚌 Transport:      ₱{transport:,}   ({percentage(transport, income):.2f}%)")
+print(f"  💡 Utilities:      ₱{utilities:,}   ({percentage(utilities, income):.2f}%)")
+print(f"  🎯 Other Costs:    ₱{other_expenses:,}   ({percentage(other_expenses, income):.2f}%)")
+print("-----------------------------------------------")
+print(f"Total Expenses:      ₱{total_expenses:,}   ({percentage(total_expenses, income):.2f}%)")
+print(f"Remaining Budget:    ₱{remaining_budget:,}   ({percentage(remaining_budget, income):.2f}%)")
+print("===============================================")
+
+# Step 7: Add financial advice
+if remaining_budget > 0:
+    print("✅ Good job! You still have money left for savings. 💰")
+elif remaining_budget == 0:
+    print("⚠️ Careful! Your income is exactly equal to your expenses.")
+else:
+    print("❌ Warning! You are overspending. Please adjust your budget.")
+
+# Step 8: Visualization with Graphs
+labels = ["Rent", "Groceries", "Transport", "Utilities", "Other", "Remaining Budget"]
+values = [rent, groceries, transport, utilities, other_expenses, remaining_budget]
+
+# Load your 1x1 picture (lagay sa folder ng script, pangalanan as "myphoto.png")
+photo = mpimg.imread("eduard.png")
+
+
+# Function to add watermark + photo
+def add_signature(fig, ax, name="Eduardson Cortez"):
+    # Watermark text sa gitna
+    ax.text(0.5, 0.5, name,
+            fontsize=40, color='gray', alpha=0.15,
+            ha='center', va='center', rotation=30,
+            transform=ax.transAxes)
+
+    # Add picture sa gilid kanan-baba (1x1 photo)
+    newax = fig.add_axes([0.80, 0.02, 0.15, 0.15], anchor='SE', zorder=1)
+    newax.imshow(photo)
+    newax.axis('off')
+
+
+# Pie Chart
+fig, ax = plt.subplots(figsize=(6, 6))
+ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
+ax.set_title("Monthly Budget Distribution (Pie Chart)")
+add_signature(fig, ax)  # watermark + picture
+plt.show()
+
+# Bar Chart
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.bar(labels, values, color=["#ff9999", "#66b3ff", "#99ff99", "#ffcc99", "#c2c2f0", "#ffd966"])
+ax.set_title("Monthly Budget Breakdown (Bar Chart)")
+ax.set_xlabel("Categories")
+ax.set_ylabel("Amount (₱)")
+add_signature(fig, ax)  # watermark + picture
+plt.show()
